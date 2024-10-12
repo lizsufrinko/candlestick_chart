@@ -1,38 +1,7 @@
 {
-    "dataRoles": [
-      {
-        "name": "Date",
-        "kind": "Grouping",
-        "displayName": "Date"
-      },
-      {
-        "name": "Open",
-        "kind": "Measure",
-        "displayName": "Open"
-      },
-      {
-        "name": "Close",
-        "kind": "Measure",
-        "displayName": "Close"
-      }
-    ],
-    "dataViewMappings": [
-      {
-        "categorical": {
-          "categories": {
-            "for": { "in": "Date" },
-            "dataReductionAlgorithm": { "top": {} }
-          },
-          "values": {
-            "select": [
-              { "bind": { "to": "Open" } },
-              { "bind": { "to": "Close" } }
-            ]
-          }
-        }
-      }
-    ],
+    "dataRoles": [],
+    "dataViewMappings": [],
     "objects": {},
     "privileges": []
-  }
+}
   
