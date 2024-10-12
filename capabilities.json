@@ -3,7 +3,10 @@
       {
           "name": "NumberField",
           "kind": "Grouping",
-          "displayName": "Numbers"
+          "displayName": "Numbers",
+          "requiredTypes": [
+              { "numeric": true }
+          ]
       }
   ],
   "dataViewMappings": [
@@ -12,7 +15,10 @@
               "categories": {
                   "for": { "in": "NumberField" }
               }
-          }
+          },
+          "conditions": [
+              { "NumberField": { "min": 1, "max": 1 } }
+          ]
       }
   ],
   "objects": {},

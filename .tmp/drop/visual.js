@@ -19,7 +19,8 @@ class Visual {
         this.target.innerHTML = "";
         // Optional chaining (checking if dataViews exists by using ?)
         const dataView = options.dataViews?.[0];
-        console.log(dataView);
+        // getting first value from the array
+        const firstValue = dataView.categorical.categories[0].values[0];
     }
 }
 
