@@ -1,16 +1,16 @@
 {
   "dataRoles": [
       {
-          "name": "Date",
+          "name": "NumberField",
           "kind": "Grouping",
-          "displayName": "Date"
+          "displayName": "Numbers"
       }
   ],
   "dataViewMappings": [
       {
           "categorical": {
               "categories": {
-                  "for": { "in": "Date" }
+                  "for": { "in": "NumberField" }
               }
           }
       }
