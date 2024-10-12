@@ -1,4 +1,0 @@
-import powerbiVisualsApi from "powerbi-visuals-api";
-import IVisualPlugin = powerbiVisualsApi.visuals.plugins.IVisualPlugin;
-declare var candlestickchartCBC86C3F2C914CD3BDF86EFE7F985E9A_DEBUG: IVisualPlugin;
-export default candlestickchartCBC86C3F2C914CD3BDF86EFE7F985E9A_DEBUG;
