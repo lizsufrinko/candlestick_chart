@@ -1,1 +1,26 @@
-{"visual":{"name":"candlestickchart","displayName":"candlestick_chart","guid":"candlestickchartCBC86C3F2C914CD3BDF86EFE7F985E9A","visualClassName":"Visual","version":"1.0.0.0","description":"","supportUrl":"","gitHubUrl":""},"apiVersion":"5.3.0","author":{"name":"","email":""},"assets":{"icon":"assets/icon.png"},"externalJS":null,"style":"style/visual.less","capabilities":"capabilities.json","dependencies":null,"stringResources":[],"version":"1.0.0.0"}
+{
+    "visual": {
+        "name": "candlestickchart",
+        "displayName": "candlestick_chart",
+        "guid": "candlestickchartCBC86C3F2C914CD3BDF86EFE7F985E9A",
+        "visualClassName": "Visual",
+        "version": "1.0.0.0",
+        "description": "",
+        "supportUrl": "",
+        "gitHubUrl": ""
+    },
+    "apiVersion": "5.3.0",
+    "author": {
+        "name": "",
+        "email": ""
+    },
+    "assets": {
+        "icon": "assets/icon.png"
+    },
+    "externalJS": null,
+    "style": "style/visual.less",
+    "capabilities": "capabilities.json",
+    "dependencies": null,
+    "stringResources": [],
+    "version": "1.0.0.0"
+}

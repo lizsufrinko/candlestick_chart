@@ -1,7 +1,20 @@
 {
-    "dataRoles": [],
-    "dataViewMappings": [],
-    "objects": {},
-    "privileges": []
+  "dataRoles": [
+      {
+          "name": "Date",
+          "kind": "Grouping",
+          "displayName": "Date"
+      }
+  ],
+  "dataViewMappings": [
+      {
+          "categorical": {
+              "categories": {
+                  "for": { "in": "Date" }
+              }
+          }
+      }
+  ],
+  "objects": {},
+  "privileges": []
 }
-  
