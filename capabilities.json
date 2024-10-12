@@ -1,26 +1,41 @@
 {
-  "dataRoles": [
-      {
-          "name": "NumberField",
-          "kind": "Grouping",
-          "displayName": "Numbers",
-          "requiredTypes": [
-              { "numeric": true }
-          ]
-      }
-  ],
-  "dataViewMappings": [
-      {
-          "categorical": {
-              "categories": {
-                  "for": { "in": "NumberField" }
+    "dataRoles": [
+        {
+            "name": "NumberField",
+            "kind": "Grouping",
+            "displayName": "Numbers",
+            "requiredTypes": [
+                { "numeric": true }
+            ]
+        }
+    ],
+    "dataViewMappings": [
+        {
+            "categorical": {
+                "categories": {
+                    "for": { "in": "NumberField" }
+                }
+            },
+            "conditions": [
+                { "NumberField": { "min": 1, "max": 1 } }
+            ]
+        }
+    ],
+    "objects": {
+      "visualSettings": {  
+        "displayName": "Visual Specific", 
+        "properties": {
+          "fontSize": {
+            "displayName": "Font Size",
+            "type": {
+              "formatting": {
+                "fontSize": true
               }
-          },
-          "conditions": [
-              { "NumberField": { "min": 1, "max": 1 } }
-          ]
+            }
+          }
+        }
       }
-  ],
-  "objects": {},
-  "privileges": []
-}
+    },
+    "privileges": []
+  }
+  
