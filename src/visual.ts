@@ -25,28 +25,38 @@ export class Visual implements IVisual {
         // Optional chaining (checking if dataViews exists by using ?)
         const dataView = options.dataViews?.[0];
     
-        // getting first value from the array
-        const firstValue = dataView.categorical.categories[0].values[0];
+        // getting dates value into a dates format
+        const categorical = dataView.categorical;
+        const category = categorical.categories[0];
 
-        // Get the font size setting from Power BI, or use the default if none is set
-        const objects = dataView.metadata.objects;
-        if (objects && objects.visualSettings) {
-            this.settings.fontSize = objects.visualSettings.fontSize || 12;
-          }
+        const dateValues = category.values.map(value => new Date(value as string));
 
+        // define the viewport
+        const width = options.viewport.width;
+        const height = options.viewport.height;
+        const margin = { top: 20, right: 20, bottom: 30, left: 50};
+
+        //create SVG canvas
         const svg = d3.select(this.target)
             .append("svg")
-            .attr("width", options.viewport.width)
-            .attr("height", options.viewport.height);
+            .attr("width", width)
+            .attr("heigh", height);
+        
+        //draw axis on the SVG
+        const xScale = d3.scaleTime()
+            .domain(d3.extent(dateValues) as [Date, Date])
+            .range([margin.left, width - margin.left]);
+        
+        const xAxis = d3.axisBottom(xScale)
+            .ticks(5)
+            .tickSize(-height + margin.top + margin.bottom);
 
-        svg.append("text")
-            .attr("x", options.viewport.width/2)
-            .attr("y", options.viewport.height/2)
-            .attr("text-anchor", "middle")
-            .attr("dominant-baseline", "middle")
-            .text(firstValue.toString())
-            .style("font-size", `${this.settings.fontSize}px`)
-            .style("fill", "black");
+        svg.append("g")
+            .attr("class", "x-axis")
+            .attr("transform", `translate(0, ${height - margin.bottom})`)
+            .call(xAxis)
+            .selectAll(".tick line")
+            .attr("stroke")
     }
 
     // Define the formatting options that will be available to the user in the formatting pane
