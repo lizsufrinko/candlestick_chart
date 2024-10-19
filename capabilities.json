@@ -20,6 +20,22 @@
         "requiredTypes": [
           { "numeric": true }
         ]
+      },
+      {
+        "name": "HighField",
+        "kind": "Measure",
+        "displayName": "High",
+        "requiredTypes": [
+          { "numeric": true }
+        ]
+      },
+      {
+        "name": "LowField",
+        "kind": "Measure",
+        "displayName": "Low",
+        "requiredTypes": [
+          { "numeric": true }
+        ]
       }
     ],
     "dataViewMappings": [
@@ -32,7 +48,9 @@
           "values": {
             "select": [
               { "bind": { "to": "OpenField" } },
-              { "bind": { "to": "CloseField" } }
+              { "bind": { "to": "CloseField" } },
+              { "bind": { "to": "HighField" } },
+              { "bind": { "to": "LowField" } }
             ]
           }
         },
@@ -40,7 +58,9 @@
           {
             "DateField": { "max": 1 },
             "OpenField": { "max": 1 },
-            "CloseField": { "max": 1 }
+            "CloseField": { "max": 1 },
+            "HighField": { "max": 1 },
+            "LowField": { "max": 1 }
           }
         ]
       }

@@ -27,9 +27,11 @@ export class Visual implements IVisual {
 
         const dateValues = category.values.map(value => new Date(value as string));
 
-        //getting close and open numbers
+        //getting close, open, high, low numbers
         const openValues = categorical.values[0].values as number[];
         const closeValues = categorical.values[1].values as number[];
+        const highValues = categorical.values[2].values as number[];
+        const lowValues = categorical.values[3].values as number[];
         
         // define the viewport
         const width = options.viewport.width;
@@ -58,8 +60,10 @@ export class Visual implements IVisual {
             .call(xAxis);
         
         // draw, define Y axis on the SVG
+        const allValues = openValues.concat(closeValues, highValues, lowValues);
+
         const yScale = d3.scaleLinear()
-            .domain([d3.min(openValues.concat(closeValues)), d3.max(openValues.concat(closeValues))])
+            .domain([d3.min(allValues), d3.max(allValues)])
             .range([height - margin.bottom, margin.top]);
         
         const yAxis = d3.axisRight(yScale)
@@ -76,18 +80,23 @@ export class Visual implements IVisual {
         // drawing bars for each day (open, close)
         const numberOfBars = dateValues.length;
         const stepSize = (width - margin.left - margin.right) / (numberOfBars - 1);
-        const barWidth = stepSize * 0.2;
+        const barWidth = stepSize * 0.25;
 
         dateValues.forEach((date, i) => {
             const openValue = openValues[i];
             const closeValue = closeValues[i];
+            const highValue = highValues[i];
+            const lowValue = lowValues[i];
 
             const yOpen = yScale(openValue);
             const yClose = yScale(closeValue);
+            const yHigh = yScale(highValue);
+            const yLow = yScale(lowValue);
 
             const fillColor = closeValue >= openValue ? "green" : "red";
 
-            const xPos = i === 0 ? xScale(date) // align first bar left
+            const xPos = 
+                i === 0 ? xScale(date) // align first bar left
                 : i === numberOfBars - 1 ? xScale(date) - barWidth // align last bar right
                 : xScale(date) - barWidth / 2;  //others middle
     
@@ -97,6 +106,15 @@ export class Visual implements IVisual {
                 .attr("width", barWidth)
                 .attr("height", Math.abs(yClose - yOpen))
                 .attr("fill", fillColor);
+            
+            // drawing wick based on high and low numbers
+            svg.append("line")
+                .attr("x1", xPos + barWidth / 2)
+                .attr("x2", xPos + barWidth / 2)
+                .attr("y1", yHigh)
+                .attr("y2", yLow)
+                .attr("stroke", fillColor)
+                .attr("stroke-width", 5);
             
             // drawing the percentage inside bar
             const percentageChange = ((closeValue - openValue) / openValue) * 100;
