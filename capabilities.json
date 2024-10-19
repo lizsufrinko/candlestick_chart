@@ -45,21 +45,7 @@
         ]
       }
     ],
-    "objects": {
-      "visualSettings": {
-        "displayName": "Visual Specific",
-        "properties": {
-          "fontSize": {
-            "displayName": "Font Size",
-            "type": {
-              "formatting": {
-                "fontSize": true
-              }
-            }
-          }
-        }
-      }
-    },
+    "objects": {},
     "privileges": []
   }
   

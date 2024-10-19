@@ -6,7 +6,6 @@ import powerbi from "powerbi-visuals-api";
 import IVisual = powerbi.extensibility.IVisual;
 import VisualConstructorOptions = powerbi.extensibility.visual.VisualConstructorOptions;
 import VisualUpdateOptions = powerbi.extensibility.visual.VisualUpdateOptions;
-import VisualObjectInstance = powerbi.VisualObjectInstance;
 
 export class Visual implements IVisual {
     private target: HTMLElement;
@@ -14,9 +13,6 @@ export class Visual implements IVisual {
 
     constructor(options: VisualConstructorOptions) {
         this.target = options.element;
-        this.settings = {
-            fontSize: 12
-        };
     }
 
     public update(options: VisualUpdateOptions) {
@@ -31,10 +27,14 @@ export class Visual implements IVisual {
 
         const dateValues = category.values.map(value => new Date(value as string));
 
+        //getting close and open numbers
+        const openValues = categorical.values[0].values as number[];
+        const closeValues = categorical.values[1].values as number[];
+        
         // define the viewport
         const width = options.viewport.width;
         const height = options.viewport.height;
-        const margin = { top: 20, right: 20, bottom: 30, left: 50};
+        const margin = { top: 20, right: 40, bottom: 30, left: 40};
 
         //create SVG canvas
         const svg = d3.select(this.target)
@@ -42,37 +42,45 @@ export class Visual implements IVisual {
             .attr("width", width)
             .attr("heigh", height);
         
-        //draw axis on the SVG
+        //draw X axis on the SVG
         const xScale = d3.scaleTime()
             .domain(d3.extent(dateValues) as [Date, Date])
             .range([margin.left, width - margin.left]);
-        
+
         const xAxis = d3.axisBottom(xScale)
-            .ticks(5)
+            .ticks(d3.timeDay.every(1))
+            .tickFormat(d3.timeFormat("%Y-%m-%d"))
             .tickSize(-height + margin.top + margin.bottom);
 
         svg.append("g")
             .attr("class", "x-axis")
             .attr("transform", `translate(0, ${height - margin.bottom})`)
-            .call(xAxis)
-            .selectAll(".tick line")
-            .attr("stroke")
-    }
+            .call(xAxis);
+        
+        // draw, define Y axis on the SVG
+        const yScale = d3.scaleLinear()
+            .domain([d3.min(openValues.concat(closeValues)), d3.max(openValues.concat(closeValues))])
+            .range([height - margin.bottom, margin.top]);
 
-    // Define the formatting options that will be available to the user in the formatting pane
-    public enumerateObjectInstances(options: any): VisualObjectInstance[] {
-        const instances: VisualObjectInstance[] = [];
+        // drawing bars for each day (open, close)
+        const barWidth = 50;
 
-        if (options.objectName === 'visualSettings') {
-            instances.push({
-                objectName: 'visualSettings',
-                properties: {
-                    fontSize: this.settings.fontSize
-                },
-                selector: null
-            });
-        }
+        dateValues.forEach((date, i) => {
+            const openValue = openValues[i];
+            const closeValue = closeValues[i];
 
-        return instances;
+            const yOpen = yScale(openValue);
+            const yClose = yScale(closeValue);
+
+            const fillColor = closeValue >= openValue ? "green" : "red";
+
+            svg.append("rect")
+                .attr("x", xScale(date) - barWidth / 2)
+                .attr("y", Math.min(yOpen, yClose))
+                .attr("width", barWidth)
+                .attr("height", Math.abs(yClose - yOpen))
+                .attr("fill", fillColor);
+            
+        });
     }
 }
