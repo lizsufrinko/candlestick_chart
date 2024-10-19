@@ -74,7 +74,9 @@ export class Visual implements IVisual {
         
 
         // drawing bars for each day (open, close)
-        const barWidth = 50;
+        const numberOfBars = dateValues.length;
+        const stepSize = (width - margin.left - margin.right) / (numberOfBars - 1);
+        const barWidth = stepSize * 0.2;
 
         dateValues.forEach((date, i) => {
             const openValue = openValues[i];
@@ -85,8 +87,12 @@ export class Visual implements IVisual {
 
             const fillColor = closeValue >= openValue ? "green" : "red";
 
+            const xPos = i === 0 ? xScale(date) // align first bar left
+                : i === numberOfBars - 1 ? xScale(date) - barWidth // align last bar right
+                : xScale(date) - barWidth / 2;  //others middle
+    
             svg.append("rect")
-                .attr("x", xScale(date) - barWidth / 2)
+                .attr("x", xPos)
                 .attr("y", Math.min(yOpen, yClose))
                 .attr("width", barWidth)
                 .attr("height", Math.abs(yClose - yOpen))
@@ -97,7 +103,7 @@ export class Visual implements IVisual {
 
             svg.append("text")
                 .attr("class", "percentage-text")
-                .attr("x", xScale(date))
+                .attr("x", xPos + barWidth / 2)
                 .attr("y", (yOpen + yClose) / 2)
                 .attr("dy", ".15em")
                 .text(percentageChange.toFixed(2) + '%');
