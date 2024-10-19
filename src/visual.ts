@@ -27,22 +27,28 @@ export class Visual implements IVisual {
 
         const dateValues = category.values.map(value => new Date(value as string));
 
-        //getting close, open, high, low numbers
+        //getting close, open, high, low and Volume numbers
         const openValues = categorical.values[0].values as number[];
         const closeValues = categorical.values[1].values as number[];
         const highValues = categorical.values[2].values as number[];
         const lowValues = categorical.values[3].values as number[];
+        const volumeValues = categorical.values[4].values as number[];
         
         // define the viewport
         const width = options.viewport.width;
         const height = options.viewport.height;
+
         const margin = { top: 20, right: 100, bottom: 30, left: 40};
+        const chartHeightRatio = 0.7;
+
+        const candlestickHeight = (height - margin.top - margin.bottom) * chartHeightRatio;
+        const volumeChartHeight = (height - margin.top - margin.bottom) * (1 - chartHeightRatio);
 
         //create SVG canvas
         const svg = d3.select(this.target)
             .append("svg")
             .attr("width", width)
-            .attr("heigh", height);
+            .attr("height", height);
         
         //draw X axis on the SVG
         const xScale = d3.scaleTime()
@@ -58,16 +64,20 @@ export class Visual implements IVisual {
             .attr("class", "x-axis")
             .attr("transform", `translate(0, ${height - margin.bottom})`)
             .call(xAxis);
+
+        //Define and Draw Y scale for prices
+        const allPriceValues = openValues.concat(closeValues, highValues, lowValues);
         
-        // draw, define Y axis on the SVG
-        const allValues = openValues.concat(closeValues, highValues, lowValues);
+        const minPrice = d3.min(allPriceValues);
+        const maxPrice = d3.max(allPriceValues);
+        const pricePadding = (maxPrice - minPrice) * 0.01;
 
         const yScale = d3.scaleLinear()
-            .domain([d3.min(allValues), d3.max(allValues)])
-            .range([height - margin.bottom, margin.top]);
+            .domain([minPrice - pricePadding, maxPrice + pricePadding])
+            .range([margin.top + candlestickHeight, margin.top]);
         
         const yAxis = d3.axisRight(yScale)
-            .ticks(5)
+            .ticks(3)
             .tickSize(-width + margin.left + margin.right)
             .tickFormat(d3.format(".2f"));
     
@@ -76,6 +86,27 @@ export class Visual implements IVisual {
             .attr("transform", `translate(${width - margin.right}, 0)`)
             .call(yAxis);
         
+        // Define and Draw Y scale for volumes
+        const maxVolume = d3.max(volumeValues);
+        const volumePadding = maxVolume * 0.05;
+
+        const yScaleVolume = d3.scaleLinear()
+            .domain([0, maxVolume + volumePadding])
+            .range([height - margin.bottom, height - margin.bottom - volumeChartHeight]);
+       
+        const yAxisVolume = d3.axisRight(yScaleVolume)
+            .ticks(3)
+            .tickSize(-width + margin.left + margin.right)
+            .tickFormat(d3.format(".2s")); 
+
+        svg.append("g")
+            .attr("class", "y-axis-volume")
+            .attr("transform", `translate(${width - margin.right}, 0)`)
+            .call(yAxisVolume)
+            .selectAll(".tick line")
+            .style("stroke", (d, i, nodes) => {
+                return i === nodes.length - 1 ? "yellow" : "none"; //style yellow top line of volumes
+            });
 
         // drawing bars for each day (open, close)
         const numberOfBars = dateValues.length;
@@ -125,6 +156,28 @@ export class Visual implements IVisual {
                 .attr("y", (yOpen + yClose) / 2)
                 .attr("dy", ".15em")
                 .text(percentageChange.toFixed(2) + '%');
+        });
+
+        // drawing volume bars
+        dateValues.forEach((date, i) => {
+            const volumeValue = volumeValues[i];
+            const fillColor = closeValues[i] >= openValues[i] ? "green" : "red";
+
+            const xPos =
+                i === 0 ? xScale(date) // align first bar left
+                : i === numberOfBars - 1 ? xScale(date) - barWidth // align last bar right
+                : xScale(date) - barWidth / 2; //others middle
+            
+            const yVolume = yScaleVolume(volumeValue);
+            const volumeHeight = height - margin.bottom - yVolume;
+
+            svg.append("rect")
+                .attr("x", xPos)
+                .attr("y", yVolume)
+                .attr("width", barWidth)
+                .attr("height", volumeHeight)
+                .attr("fill", fillColor)
+                .attr("opacity", 0.6);
         });
     }
 }

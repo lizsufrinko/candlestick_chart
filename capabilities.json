@@ -36,6 +36,14 @@
         "requiredTypes": [
           { "numeric": true }
         ]
+      },
+      {
+        "name": "VolumeField",
+        "kind": "Measure",
+        "displayName": "Volume",
+        "requiredTypes": [
+          { "numeric": true }
+        ]
       }
     ],
     "dataViewMappings": [
@@ -50,7 +58,8 @@
               { "bind": { "to": "OpenField" } },
               { "bind": { "to": "CloseField" } },
               { "bind": { "to": "HighField" } },
-              { "bind": { "to": "LowField" } }
+              { "bind": { "to": "LowField" } },
+              { "bind": { "to": "VolumeField" } }
             ]
           }
         },
@@ -60,7 +69,8 @@
             "OpenField": { "max": 1 },
             "CloseField": { "max": 1 },
             "HighField": { "max": 1 },
-            "LowField": { "max": 1 }
+            "LowField": { "max": 1 },
+            "VolumeField": { "max": 1 }
           }
         ]
       }
