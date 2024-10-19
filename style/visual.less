@@ -18,7 +18,6 @@ text {
     }
 
     path {
-        stroke: gray; 
         stroke-width: 0; 
     }
 
@@ -26,6 +25,26 @@ text {
         stroke: white; 
         stroke-dasharray: 2, 2; 
         stroke-width: 1;
+    }
+}
+
+.y-axis {
+    text {
+        fill: white;
+        font-size: 12px;
+        text-anchor: start;
+        transform: translateX(3em);
+        transform-box: fill-box;
+        transform-origin: center;
+    }
+
+    path {
+        stroke-width: 0;
+    }
+
+    line {
+        stroke: #ccc;
+        stroke-dasharray: 2, 2;
     }
 }
 

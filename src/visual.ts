@@ -34,7 +34,7 @@ export class Visual implements IVisual {
         // define the viewport
         const width = options.viewport.width;
         const height = options.viewport.height;
-        const margin = { top: 20, right: 40, bottom: 30, left: 40};
+        const margin = { top: 20, right: 100, bottom: 30, left: 40};
 
         //create SVG canvas
         const svg = d3.select(this.target)
@@ -45,7 +45,7 @@ export class Visual implements IVisual {
         //draw X axis on the SVG
         const xScale = d3.scaleTime()
             .domain(d3.extent(dateValues) as [Date, Date])
-            .range([margin.left, width - margin.left]);
+            .range([margin.left, width - margin.right]);
 
         const xAxis = d3.axisBottom(xScale)
             .ticks(d3.timeDay.every(1))
@@ -61,6 +61,17 @@ export class Visual implements IVisual {
         const yScale = d3.scaleLinear()
             .domain([d3.min(openValues.concat(closeValues)), d3.max(openValues.concat(closeValues))])
             .range([height - margin.bottom, margin.top]);
+        
+        const yAxis = d3.axisRight(yScale)
+            .ticks(5)
+            .tickSize(-width + margin.left + margin.right)
+            .tickFormat(d3.format(".2f"));
+    
+        svg.append("g")
+            .attr("class", "y-axis")
+            .attr("transform", `translate(${width - margin.right}, 0)`)
+            .call(yAxis);
+        
 
         // drawing bars for each day (open, close)
         const barWidth = 50;
