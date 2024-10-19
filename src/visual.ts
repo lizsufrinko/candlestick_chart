@@ -81,6 +81,15 @@ export class Visual implements IVisual {
                 .attr("height", Math.abs(yClose - yOpen))
                 .attr("fill", fillColor);
             
+            // drawing the percentage inside bar
+            const percentageChange = ((closeValue - openValue) / openValue) * 100;
+
+            svg.append("text")
+                .attr("class", "percentage-text")
+                .attr("x", xScale(date))
+                .attr("y", (yOpen + yClose) / 2)
+                .attr("dy", ".15em")
+                .text(percentageChange.toFixed(2) + '%');
         });
     }
 }

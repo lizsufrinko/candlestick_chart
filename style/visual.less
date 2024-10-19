@@ -10,11 +10,28 @@ text {
     font-family: Arial, sans-serif;
 }
 
-.x-axis path,
-.x-axis line {
-    stroke: white;
+.x-axis {
+    text {
+        font-size: 12px; 
+        transform: translateY(0.7em); 
+        fill: white;
+    }
+
+    path {
+        stroke: gray; 
+        stroke-width: 0; 
+    }
+
+    line {
+        stroke: white; 
+        stroke-dasharray: 2, 2; 
+        stroke-width: 1;
+    }
 }
 
-.tick text {
+
+.percentage-text {
+    font-size: 12px; 
     fill: white;
+    text-anchor: middle; 
 }
