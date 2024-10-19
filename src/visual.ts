@@ -39,7 +39,7 @@ export class Visual implements IVisual {
         const height = options.viewport.height;
 
         const margin = { top: 20, right: 100, bottom: 30, left: 40};
-        const chartHeightRatio = 0.7;
+        const chartHeightRatio = 0.80;
 
         const candlestickHeight = (height - margin.top - margin.bottom) * chartHeightRatio;
         const volumeChartHeight = (height - margin.top - margin.bottom) * (1 - chartHeightRatio);
@@ -161,7 +161,6 @@ export class Visual implements IVisual {
         // drawing volume bars
         dateValues.forEach((date, i) => {
             const volumeValue = volumeValues[i];
-            const fillColor = closeValues[i] >= openValues[i] ? "green" : "red";
 
             const xPos =
                 i === 0 ? xScale(date) // align first bar left
@@ -176,8 +175,8 @@ export class Visual implements IVisual {
                 .attr("y", yVolume)
                 .attr("width", barWidth)
                 .attr("height", volumeHeight)
-                .attr("fill", fillColor)
-                .attr("opacity", 0.6);
+                .attr("fill", "#dddddd")
+                .attr("opacity", 0.3);
         });
     }
 }
