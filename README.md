@@ -20,7 +20,6 @@ Then, import the `.pbiviz` file into Power BI manually.
 
 ## 🛠️ Built With
 - **D3.js** - For rendering the SVG as candlestick chart.
-- **TypeScript** - For Power BI visual framework.
 - **pbiviz** - For building and packaging the visual. (https://github.com/microsoft/powerbi-visuals-tools)
 - **Node.js** - For managing dependencies and build processes.
 
