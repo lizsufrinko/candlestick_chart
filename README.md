@@ -1,10 +1,6 @@
 # 🕯️ Power BI Custom Candlestick Chart
 
-This is my own **candlestick chart** built for **Power BI**. It displays **candlesticks with wicks** along with **volume bars** to visualize price movements effectively.
-
-## 📌 About
-
-This visual is built using **Power BI’s pbiviz framework** and **D3.js**, allowing seamless integration with Power BI reports. The `pbiviz` framework is essential for developing and testing Power BI visuals, while **D3.js** is used to render the candlestick chart.
+This is my own **candlestick chart** built for **Power BI**. It displays **candlesticks with wicks** along with **volume bars** to visualize price movements effectively. It includes detailed wicks to show intra-period price fluctuations and volume bars to give insights into trading activity.
 
 ## 🚀 Development
 
