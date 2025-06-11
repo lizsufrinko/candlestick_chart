@@ -16,7 +16,9 @@ export class Visual implements IVisual {
     }
 
     public update(options: VisualUpdateOptions) {
-        this.target.innerHTML = "";
+        while (this.target.firstChild) {
+            this.target.removeChild(this.target.firstChild);
+        }
         
         // Optional chaining (checking if dataViews exists by using ?)
         const dataView = options.dataViews?.[0];
