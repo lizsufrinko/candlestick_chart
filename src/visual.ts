@@ -13,10 +13,19 @@ export class Visual implements IVisual {
 
     constructor(options: VisualConstructorOptions) {
         this.target = options.element;
+        // position relative so tooltip can be absolutely positioned inside
+        this.target.style.position = "relative";
     }
 
     public update(options: VisualUpdateOptions) {
-        this.target.innerHTML = "";
+        while (this.target.firstChild) {
+            this.target.removeChild(this.target.firstChild);
+        }
+
+        const tooltip = d3.select(this.target)
+            .append("div")
+            .attr("class", "tooltip")
+            .style("display", "none");
         
         // Optional chaining (checking if dataViews exists by using ?)
         const dataView = options.dataViews?.[0];
@@ -131,26 +140,40 @@ export class Visual implements IVisual {
                 : i === numberOfBars - 1 ? xScale(date) - barWidth // align last bar right
                 : xScale(date) - barWidth / 2;  //others middle
     
-            svg.append("rect")
+            const group = svg.append("g")
+                .datum({ open: openValue, close: closeValue, high: highValue, low: lowValue })
+                .on("mousemove", (event, d) => {
+                    const [x, y] = d3.pointer(event, this.target);
+                    tooltip
+                        .style("left", `${x + 10}px`)
+                        .style("top", `${y + 10}px`)
+                        .style("display", "block")
+                        .text(`O: ${d.open}\nH: ${d.high}\nL: ${d.low}\nC: ${d.close}`);
+                })
+                .on("mouseleave", () => {
+                    tooltip.style("display", "none");
+                });
+
+            group.append("rect")
                 .attr("x", xPos)
                 .attr("y", Math.min(yOpen, yClose))
                 .attr("width", barWidth)
                 .attr("height", Math.abs(yClose - yOpen))
                 .attr("fill", fillColor);
-            
+
             // drawing wick based on high and low numbers
-            svg.append("line")
+            group.append("line")
                 .attr("x1", xPos + barWidth / 2)
                 .attr("x2", xPos + barWidth / 2)
                 .attr("y1", yHigh)
                 .attr("y2", yLow)
                 .attr("stroke", fillColor)
                 .attr("stroke-width", 5);
-            
+
             // drawing the percentage inside bar
             const percentageChange = ((closeValue - openValue) / openValue) * 100;
 
-            svg.append("text")
+            group.append("text")
                 .attr("class", "percentage-text")
                 .attr("x", xPos + barWidth / 2)
                 .attr("y", (yOpen + yClose) / 2)
