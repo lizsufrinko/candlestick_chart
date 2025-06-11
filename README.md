@@ -1,6 +1,6 @@
 # 🕯️ Power BI Custom Candlestick Chart
 
-This is my own **candlestick chart** built for **Power BI**. It displays **candlesticks with wicks** along with **volume bars** to visualize price movements effectively. It includes detailed wicks to show intra-period price fluctuations and volume bars to give insights into trading activity.
+This is my own **candlestick chart** built for **Power BI**. It displays **candlesticks with wicks** along with **volume bars** to visualize price movements effectively. It includes detailed wicks to show intra-period price fluctuations and volume bars to give insights into trading activity. **Hover over any candle to see its Open, High, Low, and Close values.**
 
 ## 🚀 Development
 
